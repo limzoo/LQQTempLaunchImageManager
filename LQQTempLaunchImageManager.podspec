@@ -1,5 +1,5 @@
 #
-#  Be sure to run `pod spec lint LaunchAnimateManager.podspec' to ensure this is a
+#  Be sure to run `pod spec lint LQQTempLaunchImageManager.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
 #  To learn more about Podspec attributes see http://docs.cocoapods.org/specification.html
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
   
   s.name         = "LQQTempLaunchImageManager"
-  s.version      = "v0.0.1"
+  s.version      = "0.0.1"
   s.summary      = "LQQTempLaunchImageManagerSummary"
   
   # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-  LaunchAnimateManagerDDDD20190217
+  LQQTempLaunchImageManagerSummary DDDD20190217
   DESC
   
   s.homepage     = "https://github.com/limzoo/LQQTempLaunchImageManager.git"
