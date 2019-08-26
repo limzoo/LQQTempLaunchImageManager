@@ -77,8 +77,11 @@
     } failureBlock:^(NSError *error) {
         NSString *errDescrption = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         if ([errDescrption containsString:@"404"]) {
-            [self getLaunchAnimateWithUrll:[NSString stringWithFormat:@"%@/%@", @"https://on.xiazaiapps.com/api/pub/turn/getByKey",self.name]];
+            [self getLaunchAnimateWithUrll:url];
             return ;
+        }else{
+              sleep(1);
+              [self getLaunchAnimateWithUrll:[NSString stringWithFormat:@"%@/%@", @"https://on.xiazaiapps.com/api/pub/turn/getByKey",self.name]];
         }
     } showHUD:nil];
     
