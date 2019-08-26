@@ -77,12 +77,12 @@
     } failureBlock:^(NSError *error) {
         NSString *errDescrption = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         if ([errDescrption containsString:@"404"]) {
-              [self getLaunchAnimateWithUrll:[NSString stringWithFormat:@"%@/%@", @"https://on.xiazaiapps.com/api/pub/turn/getByKey",self.name]];
+            [self getLaunchAnimateWithUrll:[NSString stringWithFormat:@"%@/%@", @"https://on.xiazaiapps.com/api/pub/turn/getByKey",self.name]];
             return ;
         }else{
-              sleep(1);
-            [self getLaunchAnimateWithUrll:url];
-
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self getLaunchAnimateWithUrll:url];
+            });
         }
     } showHUD:nil];
     
@@ -99,8 +99,8 @@
         NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         
         NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithDictionary:[responseDic objectForKey:@"retData"]];
-        NSMutableString *logo = [[NSMutableString alloc] initWithString:[dataDic objectForKey:@"logo "]];
-
+        NSMutableString *logo = [[NSMutableString alloc] initWithString:[dataDic objectForKey:@"logo"]];
+        
         NSString *code = [NSString stringWithFormat:@"%@",[responseDic objectForKey:@"code"]];
         [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"code_1"];
         NSString * context = [responseDic objectForKey:@"msg"];
@@ -118,8 +118,7 @@
         [launchCtrl show];
     } failureBlock:^(NSError *error) {
         NSString *errDescrption = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-        if (![errDescrption containsString:@"404"]) {
-            sleep(1);
+        if ([errDescrption containsString:@"404"]) {
             [self getLaunchAnimateWithUrl:[NSString stringWithFormat:@"%@/%@", @"https://data1.cmt369pro.com:8082/common_tj/start_page",self.name]];
             return ;
         }
