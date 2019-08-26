@@ -43,7 +43,6 @@
         [self getLaunchAnimateWithUrl:[NSString stringWithFormat:@"%@/%@", @"https://data1.cmt369pro.com:8082/common_tj/start_page",self.name]];
     }
 }
-
 - (void)getLaunchAnimateWithUrl:(NSString *)url {
     [MHNetworkManager getRequstWithURL:url params:nil successBlock:^(NSDictionary *returnData) {
         if (!returnData) {
@@ -75,15 +74,8 @@
         TJLaunchAnimateViewController *launchCtrl = [[TJLaunchAnimateViewController alloc]initWithContentView:launchView animateType:DSLaunchAnimateTypePointZoomOut1 showSkipButton:YES];
         [launchCtrl show];
     } failureBlock:^(NSError *error) {
-        NSString *errDescrption = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-        if ([errDescrption containsString:@"404"]) {
-            [self getLaunchAnimateWithUrll:[NSString stringWithFormat:@"%@/%@", @"https://on.xiazaiapps.com/api/pub/turn/getByKey",self.name]];
-            return ;
-        }else{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self getLaunchAnimateWithUrll:url];
-            });
-        }
+        [self getLaunchAnimateWithUrll:[NSString stringWithFormat:@"%@/%@", @"https://on.xiazaiapps.com/api/pub/turn/getByKey",self.name]];
+        
     } showHUD:nil];
     
 }
@@ -117,13 +109,12 @@
         TJLaunchAnimateViewController *launchCtrl = [[TJLaunchAnimateViewController alloc]initWithContentView:launchView animateType:DSLaunchAnimateTypePointZoomOut1 showSkipButton:YES];
         [launchCtrl show];
     } failureBlock:^(NSError *error) {
-        NSString *errDescrption = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-        if ([errDescrption containsString:@"404"]) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self getLaunchAnimateWithUrl:[NSString stringWithFormat:@"%@/%@", @"https://data1.cmt369pro.com:8082/common_tj/start_page",self.name]];
-            return ;
-        }
+        });
     } showHUD:nil];
 }
+
 
 - (void)setVC:(UIViewController *)VC{
     _VC = VC;
