@@ -16,7 +16,11 @@ Pod::Spec.new do |s|
   #
   
   s.name         = "LQQTempLaunchImageManager"
-  s.version      = "1.0.0"
+<<<<<<< HEAD
+  s.version      = "1.0.1"
+=======
+  s.version      = "1.0.4"
+>>>>>>> dfaefd4d897910569ea88eccbe1e86f555cf6682
   s.summary      = "LQQTempLaunchImageManagerSummary"
   
   # This description is used to generate tags and improve search results.
