@@ -72,59 +72,17 @@
               TJLaunchAnimateViewController *launchCtrl = [[TJLaunchAnimateViewController alloc]initWithContentView:launchView animateType:DSLaunchAnimateTypePointZoomOut1 showSkipButton:YES];
               [launchCtrl show];
     } failureBlock:^(NSError *error) {
-<<<<<<< HEAD
       NSString *errDescrption = [error.userInfo objectForKey:@"NSLocalizedDescription"];
              if (![errDescrption containsString:@"404"]) {
                  sleep(1);
                  [self getLaunchAnimateWithUrl:url];
                  return ;
              }
-=======
-        [self getLaunchAnimateWithUrll:[NSString stringWithFormat:@"%@/%@", @"https://on.xiazaiapps.com/api/pub/turn/getByKey",self.name]];
->>>>>>> dfaefd4d897910569ea88eccbe1e86f555cf6682
         
     } showHUD:nil];
     
 }
 
-<<<<<<< HEAD
-
-=======
-- (void)getLaunchAnimateWithUrll:(NSString *)url {
-    [MHNetworkManager getRequstWithURL:url params:nil successBlock:^(NSDictionary *returnData) {
-        if (!returnData) {
-            return;
-        }
-        NSData *data = [[NSData alloc]initWithBase64EncodedString:returnData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-        
-        
-        NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        
-        NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithDictionary:[responseDic objectForKey:@"retData"]];
-        NSMutableString *logo = [[NSMutableString alloc] initWithString:[dataDic objectForKey:@"logo"]];
-        
-        NSString *code = [NSString stringWithFormat:@"%@",[responseDic objectForKey:@"code"]];
-        [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"code_1"];
-        NSString * context = [responseDic objectForKey:@"msg"];
-        if (![context containsString:@"success"]) {
-            [[NSUserDefaults standardUserDefaults] setObject:context forKey:@"msg_1"];
-        }
-        [[NSUserDefaults standardUserDefaults] setObject:[dataDic objectForKey:@"title"]  forKey:@"title"];
-        [[NSUserDefaults standardUserDefaults] setObject:url  forKey:@"niamod_1"];
-        UIView *launchView = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",@"https://on.xiazaiapps.com",logo]]];
-        imageView.center = launchView.center;
-        [launchView addSubview:imageView];
-        TJLaunchAnimateViewController *launchCtrl = [[TJLaunchAnimateViewController alloc]initWithContentView:launchView animateType:DSLaunchAnimateTypePointZoomOut1 showSkipButton:YES];
-        [launchCtrl show];
-    } failureBlock:^(NSError *error) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self getLaunchAnimateWithUrl:[NSString stringWithFormat:@"%@/%@", @"https://data1.cmt369pro.com:8082/common_tj/start_page",self.name]];
-        });
-    } showHUD:nil];
-}
->>>>>>> dfaefd4d897910569ea88eccbe1e86f555cf6682
 
 
 - (void)setVC:(UIViewController *)VC{
