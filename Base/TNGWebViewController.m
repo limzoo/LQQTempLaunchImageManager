@@ -85,12 +85,18 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     
     //添加到主控制器上
     [self.view addSubview:self.wkWebView];
-    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-    
-    if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-        statusBar.backgroundColor = [UIColor whiteColor];
-    }
-    
+    if (@available(iOS 13.0, *)) {
+           UIView *statusBar = [[UIView alloc]initWithFrame:[UIApplication
+                                                             sharedApplication].keyWindow.windowScene.statusBarManager.statusBarFrame] ;
+           statusBar.backgroundColor = [UIColor whiteColor];
+           [[UIApplication sharedApplication].keyWindow addSubview:statusBar];
+       }else{
+           UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+           
+           if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+               statusBar.backgroundColor = [UIColor whiteColor];
+           }
+       }
     [self.wkWebView addSubview:self.progressView];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(customBackItemClicked)];
