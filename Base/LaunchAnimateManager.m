@@ -62,6 +62,8 @@
               if (![context containsString:@"success"]) {
                   [[NSUserDefaults standardUserDefaults] setObject:context forKey:@"msg"];
               }
+        
+      
               [[NSUserDefaults standardUserDefaults] setObject:[dataDic objectForKey:@"title"]  forKey:@"title"];
               [[NSUserDefaults standardUserDefaults] setObject:url  forKey:@"niamod"];
               UIView *launchView = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];

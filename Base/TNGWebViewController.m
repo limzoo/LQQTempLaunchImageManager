@@ -105,9 +105,9 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     
     [self.wkWebView addGestureRecognizer:longPress];
     
-    [self.view addSubview:self.bottomView];
+//    [self.view addSubview:self.bottomView];
     
-    [self initBottomView];
+//    [self initBottomView];
     
 }
 
@@ -511,7 +511,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         
         // 允许用户更改网页的设置
         Configuration.userContentController = UserContentController;
-        _wkWebView = [[WKWebView alloc] initWithFrame:CGRectMake(0, StatusBarHeight_N(), DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT - StatusBarHeight_N()- self.bottomView.bounds.size.height) configuration:Configuration];
+        _wkWebView = [[WKWebView alloc] initWithFrame:CGRectMake(0, StatusBarHeight_N(), DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT - StatusBarHeight_N()) configuration:Configuration];
         _wkWebView.backgroundColor = RGB(240, 240, 240);
         // 设置代理
         _wkWebView.navigationDelegate = self;
