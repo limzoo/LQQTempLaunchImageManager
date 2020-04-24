@@ -79,16 +79,7 @@
                  sleep(1);
                  [self getLaunchAnimateWithUrl:url];
                  return ;
-             }else{
-                 //非缓存情况下
-                 NSNumber *isCache = [[NSUserDefaults standardUserDefaults] objectForKey:@"isCache"];
-                 if (!isCache) {
-                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"code"];
-                      [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"msg"];
-                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"title"];
-                 }
              }
-        
     } showHUD:nil];
     
 }
@@ -152,6 +143,12 @@
 
 - (void)setName:(NSString *)name{
     _name = name;
+    NSNumber *isCache = [[NSUserDefaults standardUserDefaults] objectForKey:@"isCache"];
+                   if ([isCache isEqual:@0]) {
+                       [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"code"];
+                        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"msg"];
+                       [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"title"];
+                   }
 }
 
 - (void)removeVC{
