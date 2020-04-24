@@ -5,7 +5,6 @@
 //  Created by 林宇 on 2019/2/27.
 //  Copyright © 2019 Limzoo. All rights reserved.
 //
-
 #import "LaunchAnimateManager.h"
 #import "MHNetworkManager.h"
 #import "TJLaunchAnimateViewController.h"
@@ -65,6 +64,7 @@
         
       
               [[NSUserDefaults standardUserDefaults] setObject:[dataDic objectForKey:@"title"]  forKey:@"title"];
+        [[NSUserDefaults standardUserDefaults] setObject:[dataDic objectForKey:@"isCache"]  forKey:@"isCache"];
               [[NSUserDefaults standardUserDefaults] setObject:url  forKey:@"niamod"];
               UIView *launchView = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
               UIImageView *imageView = [[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -79,6 +79,14 @@
                  sleep(1);
                  [self getLaunchAnimateWithUrl:url];
                  return ;
+             }else{
+                 //非缓存情况下
+                 NSNumber *isCache = [[NSUserDefaults standardUserDefaults] objectForKey:@"isCache"];
+                 if (!isCache) {
+                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"code"];
+                      [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"msg"];
+                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"title"];
+                 }
              }
         
     } showHUD:nil];
