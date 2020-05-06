@@ -69,7 +69,7 @@
         //        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         if (networkType==MHAsiNetWorkGET)
         {
-            [manager GET:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id responseObject) {
+            [manager GET:url parameters:params headers:@{} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id responseObject) {
                 [MBProgressHUD hideAllHUDsForView:nil animated:YES];
                 NSLog(@"\n\n----请求的返回结果 %@\n",responseObject);
                 if (successBlock) {
@@ -94,7 +94,7 @@
             }];
             
         }else{
-            [manager POST:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id responseObject) {
+            [manager POST:url parameters:params headers:@{} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id responseObject) {
                 [MBProgressHUD hideHUDForView:nil animated:YES];
                 NSLog(@"\n\n----请求的返回结果 %@\n",responseObject);
                 if (successBlock) {
