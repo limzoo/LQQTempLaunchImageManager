@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   
   s.name         = "LQQTempLaunchImageManager"
 
-  s.version      = "1.1.1"
+  s.version      = "1.1.2"
   s.summary      = "LQQTempLaunchImageManagerSummary"
   
   # This description is used to generate tags and improve search results.
@@ -134,7 +134,7 @@ Pod::Spec.new do |s|
   # s.requires_arc = true
   
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency "AFNetworking","~>3.2.1"
+  s.dependency "AFNetworking","~>4.0.1"
   s.dependency "MBProgressHUD","~>1.1.0"
   s.dependency "SDWebImage","~>5.0.0"
   s.dependency "EasyNavigation","~>1.0.5"
