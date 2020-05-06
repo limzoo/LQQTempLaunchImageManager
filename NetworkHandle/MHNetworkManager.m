@@ -194,30 +194,28 @@
               uploadParam:(MHUploadParam *)uploadParam
                   showHUD:(BOOL)showHUD
 {
-     if (showHUD) {
-          [MBProgressHUD showHUDAddedTo:nil animated:YES];
-      }
-      NSLog(@"上传图片接口 URL-> %@",url);
-      NSLog(@"上传图片的参数-> %@",paramsDict);
-      AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-      [manager POST:url parameters:paramsDict headers:@{} constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-          [formData appendPartWithFileData:uploadParam.data name:uploadParam.name fileName:uploadParam.fileName mimeType:uploadParam.mimeType];
-      } progress:^(NSProgress * _Nonnull uploadProgress) {
-          
-      } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-          [MBProgressHUD hideHUDForView:nil animated:YES];
-                NSLog(@"----> %@",responseObject);
-                if (successBlock) {
-                    successBlock(responseObject);
-                }
-      } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-          [MBProgressHUD hideAllHUDsForView:nil animated:YES];
-                 NSLog(@"----> %@",error.domain);
-                 if (error) {
-                     failureBlock(error);
-                 }
-      }];
-      
+    if (showHUD) {
+        [MBProgressHUD showHUDAddedTo:nil animated:YES];
+    }
+    NSLog(@"上传图片接口 URL-> %@",url);
+    NSLog(@"上传图片的参数-> %@",paramsDict);
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager POST:url parameters:paramsDict headers:@{} constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:uploadParam.data name:uploadParam.name fileName:uploadParam.fileName mimeType:uploadParam.mimeType];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [MBProgressHUD hideHUDForView:nil animated:YES];
+              NSLog(@"----> %@",responseObject);
+              if (successBlock) {
+                  successBlock(responseObject);
+              }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+               NSLog(@"----> %@",error.domain);
+               if (error) {
+                   failureBlock(error);
+               }
+    }];
 }
 
 @end

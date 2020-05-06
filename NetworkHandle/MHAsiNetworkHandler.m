@@ -1,153 +1,124 @@
-//
-//  MHAsiNetworkItem.m
-//  MHProject
-//
-//  Created by MengHuan on 15/4/23.
-//  Copyright (c) 2015年 MengHuan. All rights reserved.
-//
-
+#import "MHAsiNetworkHandler.h"
 #import "MHAsiNetworkItem.h"
 #import "AFNetworking.h"
-#import "MHAsiNetworkDefine.h"
-#import <MBProgressHUD/MBProgressHUD.h>
+@interface MHAsiNetworkHandler ()
+<MHAsiNetworkDelegate>
+@end;
+@implementation MHAsiNetworkHandler
 
-@interface MHAsiNetworkItem ()
++ (MHAsiNetworkHandler *)sharedInstance
+{
+    static MHAsiNetworkHandler *handler = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        handler = [[MHAsiNetworkHandler alloc] init];
+    });
+    return handler;
+}
 
-@end
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.networkError = NO;
+    }
+    return self;
+}
 
-@implementation MHAsiNetworkItem
-
-
-#pragma mark - 创建一个网络请求项，开始请求网络
+#pragma mark - 创建一个网络请求项
 /**
- *  创建一个网络请求项，开始请求网络
+ *  创建一个网络请求项
  *
- *  @param networkType  网络请求方式
  *  @param url          网络请求URL
+ *  @param networkType  网络请求方式
  *  @param params       网络请求参数
  *  @param delegate     网络请求的委托，如果没有取消网络请求的需求，可传nil
- *  @param hashValue    网络请求的委托delegate的唯一标示
  *  @param showHUD      是否显示HUD
  *  @param successBlock 请求成功后的block
  *  @param failureBlock 请求失败后的block
  *
- *  @return MHAsiNetworkItem对象
+ *  @return 根据网络请求的委托delegate而生成的唯一标示
  */
-- (MHAsiNetworkItem *)initWithtype:(MHAsiNetWorkType)networkType
-                               url:(NSString *)url
-                            params:(NSDictionary *)params
-                          delegate:(id)delegate
-                            target:(id)target
-                            action:(SEL)action
-                         hashValue:(NSUInteger)hashValue
-                           showHUD:(BOOL)showHUD
-                      successBlock:(MHAsiSuccessBlock)successBlock
-                      failureBlock:(MHAsiFailureBlock)failureBlock
+- (MHAsiNetworkItem*)conURL:(NSString *)url
+                networkType:(MHAsiNetWorkType)networkType
+                     params:(NSMutableDictionary *)params
+                   delegate:(id)delegate
+                    showHUD:(BOOL)showHUD
+                     target:(id)target
+                     action:(SEL)action
+               successBlock:(MHAsiSuccessBlock)successBlock
+               failureBlock:(MHAsiFailureBlock)failureBlock
 {
-    if (self = [super init])
-    {
-        self.networkType    = networkType;
-        self.url            = url;
-        self.params         = params;
-        self.delegate       = delegate;
-        self.showHUD        = showHUD;
-        self.tagrget        = target;
-        self.select         = action;
-        if (showHUD==YES) {
-            [MBProgressHUD showHUDAddedTo:nil animated:YES];
+    if (self.networkError == YES) {
+//        SHOW_ALERT(@"网络连接断开,请检查网络!");
+        if (failureBlock) {
+            failureBlock(nil);
         }
-        __weak typeof(self)weakSelf = self;
-        NSLog(@"--请求url地址--%@\n",url);
-        NSLog(@"----请求参数%@\n",params);
-        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-        //        manager.responseSerializer.acceptableContentTypes =  [NSSet setWithObject:@"text/html"];
-        manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json",@"text/html", nil];
-        //        AFJSONResponseSerializer *jsonSer =(AFJSONResponseSerializer*) manager.responseSerializer;
-        //        jsonSer.removesKeysWithNullValues = YES;
-        //        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-        if (networkType==MHAsiNetWorkGET)
-        {
-            [manager GET:url parameters:params headers:@{} progress:^(NSProgress * _Nonnull uploadProgress) {
-                
-            }  success:^(NSURLSessionDataTask * _Nonnull task, id responseObject) {
-                [MBProgressHUD hideAllHUDsForView:nil animated:YES];
-                NSLog(@"\n\n----请求的返回结果 %@\n",responseObject);
-                if (successBlock) {
-                    successBlock(responseObject);
-                }
-                if ([weakSelf.delegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
-                    [weakSelf.delegate requestDidFinishLoading:responseObject];
-                }
-                [weakSelf performSelector:@selector(finishedRequest: didFaild:) withObject:responseObject withObject:nil];
-                [weakSelf removewItem];
-            } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
-                [MBProgressHUD hideAllHUDsForView:nil animated:YES];
-                NSLog(@"---error==%@\n",error.localizedDescription);
-                if (failureBlock) {
-                    failureBlock(error);
-                }
-                if ([weakSelf.delegate respondsToSelector:@selector(requestdidFailWithError:)]) {
-                    [weakSelf.delegate requestdidFailWithError:error];
-                }
-                [weakSelf performSelector:@selector(finishedRequest: didFaild:) withObject:nil withObject:error];
-                [weakSelf removewItem];
-            }];
-        }else{
-            [manager POST:url parameters:params headers:@{} progress:^(NSProgress * _Nonnull uploadProgress) {
-                
-            } success:^(NSURLSessionDataTask * _Nonnull task, id responseObject) {
-                [MBProgressHUD hideHUDForView:nil animated:YES];
-                NSLog(@"\n\n----请求的返回结果 %@\n",responseObject);
-                if (successBlock) {
-                    successBlock(responseObject);
-                }
-                if ([weakSelf.delegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
-                    [weakSelf.delegate requestDidFinishLoading:responseObject];
-                }
-                [weakSelf performSelector:@selector(finishedRequest: didFaild:) withObject:responseObject withObject:nil];
-                [weakSelf removewItem];
-            } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
-                [MBProgressHUD hideAllHUDsForView:nil animated:YES];
-                NSLog(@"---error==%@\n",error.localizedDescription);
-                if (failureBlock) {
-                    failureBlock(error);
-                }
-                if ([weakSelf.delegate respondsToSelector:@selector(requestdidFailWithError:)]) {
-                    [weakSelf.delegate requestdidFailWithError:error];
-                }
-                [weakSelf performSelector:@selector(finishedRequest: didFaild:) withObject:nil withObject:error];
-                [weakSelf removewItem];
-            }];
-        }
+        return nil;
     }
-    return self;
+    /// 如果有一些公共处理，可以写在这里
+    NSUInteger hashValue = [delegate hash];
+    self.netWorkItem = [[MHAsiNetworkItem alloc]initWithtype:networkType url:url params:params delegate:delegate target:target action:action hashValue:hashValue showHUD:showHUD successBlock:successBlock failureBlock:failureBlock];
+    self.netWorkItem.delegate = self;
+    [self.items addObject:self.netWorkItem];
+    return self.netWorkItem;
+}
+
+#pragma makr - 开始监听网络连接
+
++ (void)startMonitoring
+{
+    // 1.获得网络监控的管理者
+    AFNetworkReachabilityManager *mgr = [AFNetworkReachabilityManager sharedManager];
+    // 2.设置网络状态改变后的处理
+    [mgr setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        // 当网络状态改变了, 就会调用这个block
+        switch (status)
+        {
+            case AFNetworkReachabilityStatusUnknown: // 未知网络
+                NSLog(@"未知网络");
+                [MHAsiNetworkHandler sharedInstance].networkError = NO;
+                break;
+            case AFNetworkReachabilityStatusNotReachable: // 没有网络(断网)
+                [MHAsiNetworkHandler sharedInstance].networkError = YES;
+                break;
+            case AFNetworkReachabilityStatusReachableViaWWAN: // 手机自带网络
+                NSLog(@"手机自带网络");
+                [MHAsiNetworkHandler sharedInstance].networkError = NO;
+                break;
+            case AFNetworkReachabilityStatusReachableViaWiFi: // WIFI
+                NSLog(@"WIFI");
+                [MHAsiNetworkHandler sharedInstance].networkError = NO;
+                break;
+        }
+    }];
+    [mgr startMonitoring];
 }
 /**
- *   移除网络请求项
+ *   懒加载网络请求项的 items 数组
+ *
+ *   @return 返回一个数组
  */
-- (void)removewItem
+- (NSMutableArray *)items
 {
-    __weak typeof(self)weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([weakSelf.delegate respondsToSelector:@selector(netWorkWillDealloc:)]) {
-            [weakSelf.delegate netWorkWillDealloc:weakSelf];
-        }
-    });
-}
-
-- (void)finishedRequest:(id)data didFaild:(NSError*)error
-{
-    if ([self.tagrget respondsToSelector:self.select]) {
-        [self.tagrget performSelector:@selector(finishedRequest:didFaild:) withObject:data withObject:error];
+    if (!_items) {
+        _items = [NSMutableArray array];
     }
+    return _items;
 }
-
-- (void)dealloc
+/**
+ *   取消所有正在执行的网络请求项
+ */
++ (void)cancelAllNetItems
 {
-    
-    
+    MHAsiNetworkHandler *handler = [MHAsiNetworkHandler sharedInstance];
+    [handler.items removeAllObjects];
+    handler.netWorkItem = nil;
 }
 
+- (void)netWorkWillDealloc:(MHAsiNetworkItem *)itme
+{
+    [self.items removeObject:itme];
+    self.netWorkItem = nil;
+}
 @end
