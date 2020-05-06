@@ -94,7 +94,6 @@
                 [weakSelf performSelector:@selector(finishedRequest: didFaild:) withObject:nil withObject:error];
                 [weakSelf removewItem];
             }];
-            
         }else{
             [manager POST:url parameters:params headers:@{} progress:^(NSProgress * _Nonnull uploadProgress) {
                 
